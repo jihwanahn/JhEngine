@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreEditor", "CoreEditor\CoreEditor.csproj", "{5105FDD4-1843-4C9B-AA46-9DA6A028B129}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JhEngine", "JhEngine\JhEngine.vcxproj", "{2E669D91-1F89-4A23-ADA6-110527678EDC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AhnrealEngine", "AhnrealEngine\AhnrealEngine.vcxproj", "{2E669D91-1F89-4A23-ADA6-110527678EDC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
