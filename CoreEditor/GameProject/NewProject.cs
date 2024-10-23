@@ -99,36 +99,37 @@ namespace CoreEditor.GameProject
             var path = ProjectPath;
             if (!Path.EndsInDirectorySeparator(path))
             {
-                path += @"\";
-                path += "$@{ProjectName}";
-
-                IsValid = false;
-                if (string.IsNullOrWhiteSpace(ProjectName))
-                {
-                    ErrorMsg = "Project name is empty";
-                }
-                else if (ProjectName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
-                {
-                    ErrorMsg = "Project name contains invalid characters";
-                }
-                else if (string.IsNullOrWhiteSpace(ProjectPath.Trim()))
-                {
-                    ErrorMsg = "Project path is empty";
-                }
-                else if (ProjectPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
-                { 
-                    ErrorMsg = "Project path contains invalid characters";
-                }
-                else if (Directory.Exists(path) && Directory.EnumerateFileSystemEntries(path).Any())
-                {
-                    ErrorMsg = "Project path already exists and is not empty";
-                }
-                else
-                {
-                    IsValid = true;
-                    ErrorMsg = string.Empty;
-                }
+                path += @"\"; 
             }
+            path += "$@{ProjectName}";
+
+            IsValid = false;
+            if (string.IsNullOrWhiteSpace(ProjectName.Trim()))
+            {
+                ErrorMsg = "Project name is empty";
+            }
+            else if (ProjectName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+            {
+                ErrorMsg = "Project name contains invalid characters";
+            }
+            else if (string.IsNullOrWhiteSpace(ProjectPath.Trim()))
+            {
+                ErrorMsg = "Project path is empty";
+            }
+            else if (ProjectPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+            { 
+                ErrorMsg = "Project path contains invalid characters";
+            }
+            else if (Directory.Exists(path) && Directory.EnumerateFileSystemEntries(path).Any())
+            {
+                ErrorMsg = "Project path already exists and is not empty";
+            }
+            else
+            {
+                IsValid = true;
+                ErrorMsg = string.Empty;
+            }
+            
             return IsValid;
         }
 
