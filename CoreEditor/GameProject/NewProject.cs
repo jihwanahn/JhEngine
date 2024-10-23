@@ -43,6 +43,7 @@ namespace CoreEditor.GameProject
                 if (_projectName != value)
                 {
                     _projectName = value;
+                    ValidateProjectPath();
                     OnPropertyChanged(nameof(ProjectName));
                 }
             }
@@ -56,7 +57,36 @@ namespace CoreEditor.GameProject
                 if (_projectPath != value)
                 {
                     _projectPath = value;
+                    ValidateProjectPath();
                     OnPropertyChanged(nameof(ProjectPath));
+                }
+            }
+        }
+
+        private bool _isValid;
+        public bool IsValid
+        {
+            get => _isValid;
+            set
+            {
+                if (_isValid != value)
+                {
+                    _isValid = value;
+                    OnPropertyChanged(nameof(IsValid));
+                }
+            }
+        }
+
+        private string _errorMsg;
+        public string ErrorMsg
+        {
+            get => _errorMsg;
+            set
+            {
+                if (_errorMsg != value)
+                {
+                    _errorMsg = value;
+                    OnPropertyChanged(nameof(ErrorMsg));
                 }
             }
         }
@@ -64,6 +94,43 @@ namespace CoreEditor.GameProject
         private ObservableCollection<ProjectTemplate> _projectTemplates = new ObservableCollection<ProjectTemplate>();
         public ReadOnlyObservableCollection<ProjectTemplate> ProjectTemplates { get; }
 
+        private bool ValidateProjectPath()
+        {
+            var path = ProjectPath;
+            if (!Path.EndsInDirectorySeparator(path))
+            {
+                path += @"\";
+                path += "$@{ProjectName}";
+
+                IsValid = false;
+                if (string.IsNullOrWhiteSpace(ProjectName))
+                {
+                    ErrorMsg = "Project name is empty";
+                }
+                else if (ProjectName.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+                {
+                    ErrorMsg = "Project name contains invalid characters";
+                }
+                else if (string.IsNullOrWhiteSpace(ProjectPath.Trim()))
+                {
+                    ErrorMsg = "Project path is empty";
+                }
+                else if (ProjectPath.IndexOfAny(Path.GetInvalidPathChars()) != -1)
+                { 
+                    ErrorMsg = "Project path contains invalid characters";
+                }
+                else if (Directory.Exists(path) && Directory.EnumerateFileSystemEntries(path).Any())
+                {
+                    ErrorMsg = "Project path already exists and is not empty";
+                }
+                else
+                {
+                    IsValid = true;
+                    ErrorMsg = string.Empty;
+                }
+            }
+            return IsValid;
+        }
 
         public NewProject()
         {
@@ -82,6 +149,7 @@ namespace CoreEditor.GameProject
 
                     _projectTemplates.Add(template);
                 }
+                ValidateProjectPath();
             }
             catch (Exception e)
             {
