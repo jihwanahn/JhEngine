@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CoreEditor.GameProject
+namespace AhnrealEditor.GameProject
 {
     /// <summary>
     /// Interaction logic for OpenProjectView.xaml
