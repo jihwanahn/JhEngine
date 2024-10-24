@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CoreEditor.GameProject
+namespace AhnrealEditor.GameProject
 {
     /// <summary>
     /// Interaction logic for NewProjectView.xaml
@@ -23,6 +23,21 @@ namespace CoreEditor.GameProject
         public NewProjectView()
         {
             InitializeComponent();
+        }
+
+        private void OnCreate_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as NewProject;
+            var projectPath = vm.CreateProject(templateListBox.SelectedItem as ProjectTemplate);
+            
+            bool dialogResult = false;
+            var win = Window.GetWindow(this);
+            if(!string.IsNullOrEmpty(projectPath))
+            {
+                dialogResult = true;                
+            }
+            win.DialogResult = dialogResult;
+            win.Close();
         }
     }
 }

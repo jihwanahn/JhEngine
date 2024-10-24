@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace CoreEditor
+namespace AhnrealEditor
 {
     /// <summary>
     /// Interaction logic for App.xaml

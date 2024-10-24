@@ -1,7 +1,7 @@
-﻿<Application x:Class="CoreEditor.App"
+﻿<Application x:Class="AhnrealEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:CoreEditor"
+             xmlns:local="clr-namespace:AhnrealEditor"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

@@ -1,4 +1,4 @@
-﻿using CoreEditor.Utilities;
+﻿using AhnrealEditor.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace CoreEditor.GameProject
+namespace AhnrealEditor.GameProject
 {
     [DataContract]
     public class ProjectTemplate
@@ -32,7 +32,7 @@ namespace CoreEditor.GameProject
     }
     class NewProject : ViewModelBase
     {
-        private readonly string _templatePath = @"..\..\CoreEditor\ProjectTemplates";
+        private readonly string _templatePath = @"..\..\AhnrealEditor\ProjectTemplates\";
         //private readonly string _logPath = @"..\..\CoreEditor\Logs\";
         private string _projectName = "NewProject";
         public string ProjectName
@@ -48,7 +48,7 @@ namespace CoreEditor.GameProject
                 }
             }
         }
-        private string _projectPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\AhnrealProject\";
+        private string _projectPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\AhnrealProjects\";
         public string ProjectPath
         {
             get => _projectPath;
@@ -131,6 +131,39 @@ namespace CoreEditor.GameProject
             }
             
             return IsValid;
+        }
+
+        public string CreateProject(ProjectTemplate template)
+        {
+            ValidateProjectPath();
+            if (!IsValid)   return string.Empty;
+            
+            if(!Path.EndsInDirectorySeparator(ProjectPath)) ProjectPath += @"\";
+            var path = $@"{ProjectPath}{ProjectName}\";
+
+            try
+            {
+                if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                foreach (var folder in template.Folders)
+                {
+                    Directory.CreateDirectory(Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path), folder)));
+                }
+                var dirInfo = new DirectoryInfo(path + @".Ahnreal\");
+                dirInfo.Attributes |= FileAttributes.Hidden;
+                File.Copy(template.IconFilePath, Path.GetFullPath(Path.Combine(dirInfo.FullName, "logo.png")));
+                File.Copy(template.PreviewFilePath, Path.GetFullPath(Path.Combine(dirInfo.FullName, "preview.png")));
+
+                var projectXml = File.ReadAllText(template.ProjectFilePath);
+                projectXml = string.Format(projectXml, ProjectName, ProjectPath);
+                var projectPath = Path.GetFullPath(Path.Combine(path, $"{ProjectName}{Project.Extension}"));
+                File.WriteAllText(projectPath, projectXml);
+                return path;
+            }
+            catch (Exception e)
+            {
+                Debug.Write(e.Message);
+                return string.Empty;
+            }
         }
 
         public NewProject()
